@@ -2,6 +2,27 @@
 {
     private static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        string directory = @"" + Console.ReadLine();
+        directory = directory.Trim('"');        
+
+        try
+        {           
+
+            var csvFiles = Directory.EnumerateFiles(directory, "*.csv");
+
+            foreach (string file in csvFiles)
+            {
+                var fileContent = File.ReadAllText(file);
+                if (fileContent.Contains('|')) fileContent = fileContent.Replace('|', ',');
+                if (fileContent.Contains("User8,")) fileContent = fileContent.Replace("User8,", "");
+                if (fileContent.Contains("\"")) fileContent = fileContent.Replace("\"", "");
+                if (fileContent.Contains(",,")) fileContent = fileContent.Replace(",,", ",");
+                File.WriteAllText(file, fileContent);
+            }
+
+        } catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }        
     }
 }
